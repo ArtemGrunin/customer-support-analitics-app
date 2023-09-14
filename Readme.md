@@ -48,7 +48,7 @@ D 3 10 P 01.12.2012<br>
 **Output:**
 <br>83<br>
 100<br>
---<br>
+-<br>
 
 ### How to run
 
@@ -56,6 +56,6 @@ D 3 10 P 01.12.2012<br>
 ✅Put your test text into `src/main/resourses/input_data.txt` (if you want)<br>
 ✅Run and enjoy the program
 
-###Author
+### Author
 
 Artem Grunin
