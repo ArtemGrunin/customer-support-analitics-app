@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ua.com</groupId>
-    <artifactId>customer-support-analitics-app</artifactId>
+    <artifactId>customer-support-analytics-app</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>

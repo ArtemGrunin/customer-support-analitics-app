@@ -1,9 +1,9 @@
-package ua.com.service.impl;
+package com.testtask.service.impl;
 
+import com.testtask.model.RecordItem;
+import com.testtask.service.RecordService;
 import java.util.ArrayList;
 import java.util.List;
-import ua.com.model.RecordItem;
-import ua.com.service.RecordService;
 
 public class RecordServiceImpl implements RecordService {
     private final List<RecordItem> records = new ArrayList<>();

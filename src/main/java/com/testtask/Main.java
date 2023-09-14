@@ -1,16 +1,16 @@
-package ua.com;
+package com.testtask;
 
+import com.testtask.model.DataItem;
+import com.testtask.service.DataParserService;
+import com.testtask.service.QueryService;
+import com.testtask.service.RecordService;
+import com.testtask.service.impl.DataParserServiceImpl;
+import com.testtask.service.impl.DataService;
+import com.testtask.service.impl.QueryServiceImpl;
+import com.testtask.service.impl.RecordServiceImpl;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import ua.com.model.DataItem;
-import ua.com.service.DataParserService;
-import ua.com.service.QueryService;
-import ua.com.service.RecordService;
-import ua.com.service.impl.DataParserServiceImpl;
-import ua.com.service.impl.DataService;
-import ua.com.service.impl.QueryServiceImpl;
-import ua.com.service.impl.RecordServiceImpl;
 
 public class Main {
     private static final DataParserService parserService = new DataParserServiceImpl();

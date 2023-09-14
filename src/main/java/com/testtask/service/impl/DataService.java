@@ -1,17 +1,16 @@
-package ua.com.service.impl;
+package com.testtask.service.impl;
 
+import com.testtask.model.DataItem;
+import com.testtask.model.QueryItem;
+import com.testtask.model.RecordItem;
+import com.testtask.service.QueryService;
+import com.testtask.service.RecordService;
 import java.util.ArrayList;
 import java.util.List;
-import ua.com.model.DataItem;
-import ua.com.model.QueryItem;
-import ua.com.model.RecordItem;
-import ua.com.service.QueryService;
-import ua.com.service.RecordService;
 
 public class DataService {
     private static final double INVALID_AVERAGE_TIME = -1.0;
     private static final String NO_AVERAGE_TIME_INDICATOR = "-";
-
     private final RecordService recordService;
     private final QueryService queryService;
 

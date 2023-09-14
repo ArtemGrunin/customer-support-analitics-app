@@ -1,4 +1,4 @@
-package ua.com.model;
+package com.testtask.model;
 
 import java.time.LocalDate;
 

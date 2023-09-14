@@ -1,21 +1,20 @@
-package ua.com.service.impl;
+package com.testtask.service.impl;
 
+import com.testtask.model.DataItem;
+import com.testtask.model.QueryItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
-import ua.com.model.DataItem;
-import ua.com.model.QueryItem;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DataParserServiceImplTest {
+
     private DataParserServiceImpl parser;
 
     private static final String SAMPLE_DATA = "7\n"
@@ -28,6 +27,18 @@ public class DataParserServiceImplTest {
             + "D 3 10 P 01.12.2012";
 
     private static final int EXPECTED_SIZE_SAMPLE_DATA = 7;
+
+    private static final String ERROR_INVALID_DATE = "Invalid date format: ";
+    private static final String ERROR_INVALID_PARTS = "Invalid number of parts in the line";
+    private static final String ERROR_EMPTY_DATA = "Input data cannot be empty";
+    private static final String ERROR_INSUFFICIENT_DATA = "Insufficient number of lines provided";
+    private static final String ERROR_INVALID_PREFIX = "Invalid line prefix";
+    private static final String TEMP_DIR_PATH = System.getProperty("java.io.tmpdir");
+    private static final String INVALID_DATE_LINE = "1\nC 1.1 8.15.1 P 15/10/2012 83";
+    private static final String INVALID_PARTS_LINE = "1\nC 1.1 8.15.1 15.10.2012 83";
+    private static final String EMPTY_LINE = "\n\n";
+    private static final String INSUFFICIENT_DATA_LINE = "1\n";
+    private static final String INVALID_PREFIX_LINE = "1\nE 1.1 8.15.1 P 15.10.2012 83";
 
     @BeforeEach
     void setUp() {
@@ -49,50 +60,28 @@ public class DataParserServiceImplTest {
     }
 
     @Test
-    void testInvalidDateFormat() {
-        String invalidData = "1\nC 1.1 8.15.1 P 15/10/2012 83";
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            parser.parseFromString(invalidData);
-        });
-        assertTrue(exception.getMessage().contains("Invalid date format: 15/10/2012"));
+    void invalidDateFormat() {
+        assertParsingError(INVALID_DATE_LINE, ERROR_INVALID_DATE + "15/10/2012");
     }
 
     @Test
-    void testInvalidNumberOfParts() {
-        String invalidData = "1\nC 1.1 8.15.1 15.10.2012 83";
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            parser.parseFromString(invalidData);
-        });
-
-        assertTrue(exception.getMessage().contains("Invalid number of parts in the line"));
+    void invalidNumberOfParts() {
+        assertParsingError(INVALID_PARTS_LINE, ERROR_INVALID_PARTS);
     }
 
     @Test
-    void testEmptyLine() {
-        String emptyData = "\n\n";
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            parser.parseFromString(emptyData);
-        });
-        assertEquals("Input data cannot be empty", exception.getMessage());
+    void emptyLine() {
+        assertParsingError(EMPTY_LINE, ERROR_EMPTY_DATA);
     }
 
     @Test
-    void testInsufficientData() {
-        String data = "1\n";
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            parser.parseFromString(data);
-        });
-        assertEquals("Insufficient number of lines provided", exception.getMessage());
+    void insufficientData() {
+        assertParsingError(INSUFFICIENT_DATA_LINE, ERROR_INSUFFICIENT_DATA);
     }
 
     @Test
-    void testInvalidLinePrefix() {
-        String invalidPrefix = "1\nE 1.1 8.15.1 P 15.10.2012 83";
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            parser.parseFromString(invalidPrefix);
-        });
-
-        assertTrue(exception.getMessage().contains("Invalid line prefix"));
+    void invalidLinePrefix() {
+        assertParsingError(INVALID_PREFIX_LINE, ERROR_INVALID_PREFIX);
     }
 
     private void verifySampleDataItems(List<DataItem> items) {
@@ -107,9 +96,16 @@ public class DataParserServiceImplTest {
         return tempFile;
     }
 
+    private void assertParsingError(String data, String expectedErrorMessage) {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            parser.parseFromString(data);
+        });
+        assertTrue(exception.getMessage().contains(expectedErrorMessage));
+    }
+
     @AfterEach
     void cleanUp() throws IOException {
-        Files.list(Path.of(System.getProperty("java.io.tmpdir")))
+        Files.list(Path.of(TEMP_DIR_PATH))
                 .filter(path -> path.toString().startsWith("test"))
                 .forEach(path -> {
                     try {

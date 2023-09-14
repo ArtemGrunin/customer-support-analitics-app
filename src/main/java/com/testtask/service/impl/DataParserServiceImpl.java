@@ -1,5 +1,9 @@
-package ua.com.service.impl;
+package com.testtask.service.impl;
 
+import com.testtask.model.DataItem;
+import com.testtask.model.QueryItem;
+import com.testtask.model.RecordItem;
+import com.testtask.service.DataParserService;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,17 +14,13 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import ua.com.model.DataItem;
-import ua.com.model.QueryItem;
-import ua.com.model.RecordItem;
-import ua.com.service.DataParserService;
 
 public class DataParserServiceImpl implements DataParserService {
 
+    private static final String DATE_PATTERN = "d[.]M[.]yyyy";
     private static final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder()
-            .appendPattern("d[.]M[.]yyyy")
+            .appendPattern(DATE_PATTERN)
             .toFormatter();
-
     private static final String RECORD_PREFIX = "C";
     private static final String QUERY_PREFIX = "D";
     private static final String WILDCARD = "*";
@@ -44,7 +44,29 @@ public class DataParserServiceImpl implements DataParserService {
     private static final int EXPECTED_PARTS_FOR_D = 5;
 
     @Override
-    public List<DataItem> parseData(List<String> lines) {
+    public List<DataItem> parseFromFile(Path path) throws IOException {
+        List<String> inputData = Files.readAllLines(path);
+        return parseInputData(inputData);
+    }
+
+    @Override
+    public List<DataItem> parseFromString(String inputString) {
+        List<String> inputData = Arrays.asList(inputString.split(LINE_SEPARATOR));
+        return parseInputData(inputData);
+    }
+
+    private List<DataItem> parseInputData(List<String> inputData) {
+        validateInputData(inputData);
+        List<String> actualData = extractActualData(inputData);
+        return parseData(actualData);
+    }
+
+    private List<String> extractActualData(List<String> inputData) {
+        int numberOfLines = Integer.parseInt(inputData.get(0));
+        return inputData.subList(1, numberOfLines + 1);
+    }
+
+    private List<DataItem> parseData(List<String> lines) {
         List<DataItem> result = new ArrayList<>();
 
         for (String line : lines) {
@@ -59,19 +81,7 @@ public class DataParserServiceImpl implements DataParserService {
         return result;
     }
 
-    @Override
-    public List<DataItem> parseFromFile(Path path) throws IOException {
-        List<String> inputData = Files.readAllLines(path);
-        return parseInputData(inputData);
-    }
-
-    @Override
-    public List<DataItem> parseFromString(String inputString) {
-        List<String> inputData = Arrays.asList(inputString.split(LINE_SEPARATOR));
-        return parseInputData(inputData);
-    }
-
-    private List<DataItem> parseInputData(List<String> inputData) {
+    private void validateInputData(List<String> inputData) {
         if (inputData == null || inputData.isEmpty()) {
             throw new IllegalArgumentException("Input data cannot be empty");
         }
@@ -87,8 +97,6 @@ public class DataParserServiceImpl implements DataParserService {
         if (inputData.size() < numberOfLines + 1) {
             throw new IllegalArgumentException("Insufficient number of lines provided");
         }
-        List<String> actualData = inputData.subList(1, numberOfLines + 1);
-        return parseData(actualData);
     }
 
     private RecordItem parseRecord(String line) {

@@ -1,9 +1,9 @@
-package ua.com.service.impl;
+package com.testtask.service.impl;
 
+import com.testtask.model.QueryItem;
+import com.testtask.model.RecordItem;
+import com.testtask.service.QueryService;
 import java.util.List;
-import ua.com.model.QueryItem;
-import ua.com.model.RecordItem;
-import ua.com.service.QueryService;
 
 public class QueryServiceImpl implements QueryService {
 

@@ -1,9 +1,9 @@
-package ua.com.service.impl;
+package com.testtask.service.impl;
 
+import com.testtask.model.QueryItem;
+import com.testtask.model.RecordItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ua.com.model.QueryItem;
-import ua.com.model.RecordItem;
 
 import java.time.LocalDate;
 import java.util.Arrays;

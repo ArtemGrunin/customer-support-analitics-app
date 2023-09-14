@@ -1,13 +1,11 @@
-package ua.com.service;
+package com.testtask.service;
 
+import com.testtask.model.DataItem;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import ua.com.model.DataItem;
 
 public interface DataParserService {
-    List<DataItem> parseData(List<String> lines);
-
     List<DataItem> parseFromFile(Path path) throws IOException;
 
     List<DataItem> parseFromString(String inputString);

@@ -1,7 +1,7 @@
-package ua.com.service;
+package com.testtask.service;
 
+import com.testtask.model.RecordItem;
 import java.util.List;
-import ua.com.model.RecordItem;
 
 public interface RecordService {
     void addRecord(RecordItem record);
